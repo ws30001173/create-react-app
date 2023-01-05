@@ -42,7 +42,7 @@ const App = () => {
 
   const [currentAccount, setCurrentAccount] = useState("");
 
-  const contractAddress = "0x841bDC39822E4043326528bf00Ef6F45d9385933";
+  const contractAddress = "0x75b603eB03B37590F3C88B9bD0322EC1C54d7b7a";
 
   // reference the abi content
   const contractABI = abi.abi;
