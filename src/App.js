@@ -66,21 +66,52 @@ const App = () => {
       }
     };
 
+  // const wave = async () => {
+  //   try {
+  //     const { ethereum } = window; // equal to: const ethereum = window.ethereum;
+
+  //     if (ethereum) {
+  //       const provider = new ethers.providers.Web3Provider(ethereum); // use nodes wallet provides to send and receive data
+  //       const signer = provider.getSigner();
+
+  //       // contract infos include ABI
+  //       const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+  //       let count = await wavePortalContract.getTotalWaves();
+  //       console.log("Retrieved total wave count...", count.toNumber());
+  //     } else {
+  //       console.log("Ethereum object doesn't exist~");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
   const wave = async () => {
     try {
-      const { ethereum } = window; // equal to: const ethereum = window.ethereum;
+      const { ethereum } = window;
 
       if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum); // use nodes wallet provides to send and receive data
+        const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-
-        // contract infos include ABI
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
         let count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
+
+        /*
+        * Execute the actual wave from your smart contract
+        */
+        const waveTxn = await wavePortalContract.wave();
+        console.log("Mining...", waveTxn.hash);
+
+        await waveTxn.wait();
+        console.log("Mined -- ", waveTxn.hash);
+
+        count = await wavePortalContract.getTotalWaves();
+        console.log("Retrieved total wave count...", count.toNumber());
       } else {
-        console.log("Ethereum object doesn't exist~");
+        console.log("Ethereum object doesn't exist!");
       }
     } catch (error) {
       console.log(error);
