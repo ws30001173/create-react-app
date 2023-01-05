@@ -9,7 +9,7 @@ const getEthereumObject = () => window.ethereum;
  * This function returns the first linked account found.
  * If there is no account linked, it will return null.
  */
-const findMetaMaskAccount = async () => {
+const findMetaMaskAccount =  async () => {
   try {
     const ethereum = getEthereumObject();
 
@@ -71,7 +71,7 @@ const App = () => {
       const { ethereum } = window; // equal to: const ethereum = window.ethereum;
 
       if (ethereum) {
-        const provider = new ethers.providers.WebProvider(ethereum); // use nodes wallet provides to send and receive data
+        const provider = new ethers.providers.Web3Provider(ethereum); // use nodes wallet provides to send and receive data
         const signer = provider.getSigner();
         // contract infos include ABI
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
