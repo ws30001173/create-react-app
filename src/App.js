@@ -55,7 +55,7 @@ const App = () => {
         return;
       }
 
-      const accounts = await ethereum.request({
+      const accounts  = await ethereum.request({
           method: "eth_requestAccounts",
       });
 
