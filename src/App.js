@@ -41,11 +41,43 @@ const findMetaMaskAccount =  async () => {
 const App = () => {
 
   const [currentAccount, setCurrentAccount] = useState("");
+  const [allWaves, setAllWaves] = useState([]);
 
-  const contractAddress = "0x9e8359a1639E3C26e1702e2fdf43e71170Dd187A";
-
-  // reference the abi content
+  const contractAddress = "0x842aa6bE6A16F36EbdF79BF2Bb18C5Edfe4a2215";
   const contractABI = abi.abi;
+
+  const getAllWaves = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        // Call getAllwaves method
+        const waves = await wavePortalContract.getAllWaves();
+
+        // Pick object out
+        let wavesCleaned = [];
+        waves.forEach(wave => {
+          wavesCleaned.push({
+            address: wave.waver,
+            timestamp: new Date(wave.timestamp * 1000),
+            message: wave.message
+          });
+        });
+
+        // store data in react state
+        setAllWaves(wavesCleaned);
+      } else {
+        console.log("Ethereum object doesn't exist!")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+        
+
   // connect to wallet
   const connectWallet = async () => {
     try {
@@ -88,16 +120,18 @@ const App = () => {
   // }
 
   const wave = async () => {
+    if (!currentAccount) {
+      connectWallet();
+      return;
+    }
+
     try {
       const { ethereum } = window;
 
       if (ethereum) {
+
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-
-        /*
-        * You're using contractABI here
-        */
         const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
 
         let count = await wavePortalContract.getTotalWaves();
@@ -152,9 +186,18 @@ const App = () => {
   
       {!currentAccount && (
         <button className="waveButton" onClick={connectWallet}>
-         Connect Wallet
+         Connect Wallet First
         </button>
       )}
+
+      {allWaves.map((wave, index) => {
+        return (
+          <div key={index} style={{ backgroudColor: "OldLace", marginTop: "16px", padding: "8px" }}>
+            <div>Address: {wave.address}</div>
+              <div>Time: {wave.timestamp.toString()}</div>
+              <div>Message: {wave.message}</div>
+            </div>)
+      })}
       
     </div>
   </div>
