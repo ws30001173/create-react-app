@@ -136,12 +136,12 @@ const App = () => {
     <div className="mainContainer">
       <div className="dataContainer">
         <div className="header">
-        👋 Hey there!
+          <h1>👋 Hey there!</h1>
       </div>
 
       <div className="bio">
-        get to know how ethereum object injected into the browser window object~
-        connect the wallet and wave at me!
+        <p>get to know how ethereum object injected into the browser window object~
+        connect the wallet and wave at me!</p>
       </div>
 
       <button className="waveButton" onClick={wave}>
@@ -155,8 +155,10 @@ const App = () => {
          Connect Wallet
         </button>
       )}
+      
     </div>
   </div>
+
   );
 }
 export default App;
